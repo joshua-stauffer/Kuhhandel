@@ -143,7 +143,7 @@ class TestPlayer(unittest.TestCase):
 
         msg = json.loads(self.sock.msg_queue.popleft())
         self.assertEqual(msg['type'], 'query')
-        self.assertEqual(msg['payload'], ['auction', 'challenge'])
+        self.assertEqual(msg['payload'], 'Please choose auction or challenge')
 
     def test_choose_action_auction(self):
         response = json.dumps({
