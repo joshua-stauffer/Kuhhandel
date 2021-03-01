@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+  <title>Kuh Handel</title>
+</head>
+<body>
+    <h1>Kuh Handel</h1>
+    <label>
+      Name:
+      <input type='text' id='username'>
+      <button id='name-submit'>Submit Name</button>
+    </label>
+    <hr>
+    <h3>Start Turn Controls</h3>
+    <button id='auctionButton'>Auction</button>
+    <button id='challengeButton'>Challenge</button>
+    <hr>
+    <h3>Auction Controls</h3>
+    <p>Current Bid: <span id='bid'></span></p>
+    <input type='text' id='bid-input'>
+    <button id='auction-submit'>Place Bid</button>
+    <label>
+      Auctioneer Only:
+      price:
+      <input type='text' id='auction-buy-price'>
+      <button id='auction-buy'>Match Current Bid</button>
+      -- must play before auction end, and must play again for every new bid
+    </label>
+    <hr>
+    <h3>Challenge Controls</h3>
+    <label>
+      Player to Challenge:
+      <input type='text' id='challenge-player'>
+    </label>
+    <label>
+      Card to Challenge:
+      <input type='text' id='challenge-card'>
+    </label>
+    <button id='challenge-submit'>Submit Challenge</button>
+    <hr>
+    <h3>Payment Controls</h3>
+    <label>
+      Zeros:
+      <input type='text' id='payment-0'>
+    </label>
+    <label>
+      Tens:
+      <input type='text' id='payment-10'>
+    </label>
+    <label>
+      Twenties:
+      <input type='text' id='payment-20'>
+    </label>
+    <label>
+      Fifties:
+      <input type='text' id='payment-50'>
+    </label>    
+    <label>
+      Hundreds:
+      <input type='text' id='payment-100'>
+    </label>    
+    <label>
+      Two Hundreds:
+      <input type='text' id='payment-200'>
+    </label>    
+    <label>
+      Five Hundreds:
+      <input type='text' id='payment-500'>
+    </label>
+    <button id='payment-submit'>Submit Payment</button>
+    <hr>
+
+    <h3>Event Feed</h3>
+    <ul id='feed'>
+
+    </ul>
+  <script src="main.js"></script>
+</body>
