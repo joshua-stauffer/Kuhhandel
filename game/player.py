@@ -17,12 +17,14 @@ class Player:
 
     def can_trade(self):
         """Returns true if player has incomplete sets"""
+        
         if len(self.cards):
             return True
         return False
 
     def get_global_state(self):
         """returns a dictionary of player's public-facing data"""
+        
         return {
             'wallet': self.wallet.count,
             'cards': self.cards,
@@ -31,20 +33,24 @@ class Player:
 
     def get_score(self):
         """Returns the current score of completed cards"""
+        
         return sum([c.value for c in self.completed_sets]) * len(self.completed_sets)
 
     def verify_bid(self, bid_value):
         """Confirms that a bid amount is less than the total held in wallet."""
+        
         return bid_value <= self.wallet.total
         
     # mutators -- change object state in some way
 
     def accept_payment(self, payment):
         """Adds money cards from payment to wallet"""
+        
         self.wallet.accept_payment(payment)
 
     def add_card(self, card):
         """Adds a card to players cards, and completes a set as necessary"""
+        
         self.cards.append(card)
         # check to see if set is completed
         if self.cards.count(card) == 4:
@@ -105,6 +111,7 @@ class Player:
 
     async def create_payment(self, total):
         """Requests money card combination from client and waits for a message containing the correct amount."""
+        
         await self.client.send_msg({
                 'message': f'Please select payment cards that total at least {total}'
             }, 'query')
@@ -117,6 +124,7 @@ class Player:
 
     def get_bid(self):
         """Checks to see if player has made a bid"""
+        
         msg = self.client.get_msg_by_type('bid')
         if msg:
             if self.verify_bid(msg['payload']['amount']):
@@ -126,6 +134,7 @@ class Player:
 
     async def get_challenge(self):
         """Sends a message to client asking for challenge response, and then waits for the response"""
+        
         await self.client.send_msg({
             'message': 'Please select the player and card you wish to challenge'
         }, 'query')
@@ -133,9 +142,12 @@ class Player:
 
     async def get_challenge_payment(self):
         """Queries client and returns a Payment"""
+        
         return await self.create_payment(0)
 
     async def get_name(self):
+        """Queries and sets client username"""
+        
         await self.client.send_msg('Please enter your username', 'query')
         payload = await self.client.wait_for_msg('username')
         self.name = payload['username']

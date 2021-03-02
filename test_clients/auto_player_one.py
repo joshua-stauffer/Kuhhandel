@@ -8,6 +8,8 @@ player_names = ['Player Two', 'Player Three']
 animal_names = ['rooster', 'duck', 'cat', 'dog', 'sheep', 'goat', 'donkey', 'pig', 'cow', 'horse']
 
 async def client():
+    """Network interface for player"""
+
     uri = 'ws://localhost:9876'
     user_id = 'Player One'
     async with websockets.connect(uri) as websocket:

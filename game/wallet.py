@@ -15,6 +15,7 @@ class Wallet:
 
     @property
     def total(self):
+        
         return (
             self.tens * 10 + \
             self.twenties * 20 + \
@@ -26,6 +27,7 @@ class Wallet:
 
     @property
     def count(self):
+
         return sum(
             [self.zeros, self.tens, self.twenties, self.fifties,
             self.hundreds, self.twohundreds, self.fivehundreds]
@@ -33,6 +35,7 @@ class Wallet:
 
     def donkey_played(self):
         """Call each time a donkey card appears to add extra money card"""
+        
         if self._donkey_count == 0:
             self.fifties += 1
         elif self._donkey_count == 1:
@@ -47,6 +50,7 @@ class Wallet:
 
     def create_payment(self, money_dict):
         """Moves money cards specified in money_dict into a Payment object and returns it. Raises ValueError when trying to spend more money than wallet contains."""
+        
         payment = Payment(**money_dict)
         if not self.check_payment(payment):
             raise ValueError('Not enough money cards in wallet for this transaction.')
@@ -61,6 +65,7 @@ class Wallet:
         
     def accept_payment(self, payment):
         """Moves money from payment object into wallet"""
+        
         self.zeros += payment.zeros
         self.tens += payment.tens
         self.twenties += payment.twenties
@@ -71,6 +76,7 @@ class Wallet:
 
     def check_payment(self, payment):
         """Checks that payment request is available in this wallet and returns bool"""
+        
         if self.total < payment.total \
             or self.count < payment.count \
             or self.zeros < payment.zeros \
@@ -84,6 +90,8 @@ class Wallet:
         return True
 
     def to_dict(self):
+        """Returns contents of wallet as dict"""
+
         return {
             'zeros': self.zeros,
             'tens': self.tens,

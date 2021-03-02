@@ -26,12 +26,14 @@ class Game:
 
     def players_can_trade(self):
         """returns true if any player has a trade available"""
+
         return len([1 for p in self.players if p.can_trade()]) > 0
 
     # mutators
 
     def add_player(self, player):
         """Add a player object to this game"""
+
         self.players.append(player)
         if len(self.players) == self.num_players:
             self.is_ready = True
@@ -39,6 +41,7 @@ class Game:
     def remove_player(self, ws):
         """Remove player object from this game by passing the websocket connection
         to be removed."""
+
         player = None
         for p in self.players:
             if p.client._websocket == ws:
@@ -50,6 +53,7 @@ class Game:
 
     async def flip_card(self):
         """returns a random card from the deck. If it is a donkey, updates each player's wallet accordingly and pushes global state"""
+        
         if not len(self.deck):
             return False
         card = self.deck.pop(random.randrange(0, len(self.deck)))
@@ -63,6 +67,7 @@ class Game:
 
     def update_global_state(self):
         """update the global state property to latest state"""
+        
         self.global_state = {
             'players': [p.name for p in self.players],
             **{p.name: p.get_global_state() for p in self.players},
@@ -73,6 +78,7 @@ class Game:
 
     async def push_all(self, msg):
         """send a message to each player in game"""
+        
         #TODO: build this out and refactor all group calls to use it
         raise Exception('Game.push_all is not implemented yet')
 
@@ -80,6 +86,7 @@ class Game:
         """utility auction function to send latest bid to players.
             bid: int
             player: Player object"""
+
         for p in self.players:
             await p.client.send_msg({
                     'bid': bid,
@@ -90,12 +97,14 @@ class Game:
 
     async def run(self):
         """Waits for enough players to join, then starts the game"""
+        
         while not self.is_ready:
             await asyncio.sleep(1)
         await self._play()
 
     async def _play(self):
         """function implementing main gameplay"""
+        
         print('Started game')
 
         while len(self.deck) or self.players_can_trade():
@@ -243,10 +252,8 @@ class Game:
 
         if payment1.total >= payment2.total:
             buyer = player
-            seller = player_to_challenge
         else:
             buyer = player_to_challenge
-            seller = player
 
         # exchange payments
         player.wallet.accept_payment(payment2)
@@ -262,6 +269,7 @@ class Game:
     
     def has_legal_challenge(self, player):
         """returns a list of players that player can challenge"""
+        
         others = [p for p in self.players if p != player]
         can_challenge = []
         player_cards = set(player.cards)

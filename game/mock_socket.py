@@ -27,19 +27,23 @@ class MockSocket:
 
     async def send(self, msg):
         """mocks async network call"""
+
         await asyncio.sleep(self.time_delay)
         self.msg_queue.append(msg)
 
     async def recv(self):
         """mocks async network return by returning
         val saved during init"""
+
         await asyncio.sleep(self.time_delay)
         return self.return_val
 
     def add_recv_val(self, val):
         """Add a value to return from recv if object is already initialized"""
+        
         self.return_val = json.dumps(val)
 
     def push_to_queue(self, iterable):
         """Accepts any iterable and adds contents to the queue"""
+        
         self.inbound_queue.extend(iterable)

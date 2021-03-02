@@ -1,3 +1,5 @@
 trash_heap/
 __pycache__
 env/
+.DS_Store
+.vscode/

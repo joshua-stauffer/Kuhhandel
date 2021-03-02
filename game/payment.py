@@ -5,6 +5,7 @@ class Payment:
 
     def __init__(self, zeros=0, tens=0, twenties=0, fifties=0,
             hundreds=0, twohundreds=0, fivehundreds=0):
+        
         self.zeros = zeros
         self.tens = tens
         self.twenties = twenties
@@ -16,6 +17,7 @@ class Payment:
     @property
     def total(self):
         """Returns the sum of the cards in this Payment"""
+        
         return (
             self.tens * 10 + \
             self.twenties * 20 + \
@@ -27,6 +29,7 @@ class Payment:
     @property
     def count(self):
         """Returns the number of cards in this Payment"""
+        
         return sum(
             [self.zeros, self.tens, self.twenties, self.fifties,
             self.hundreds, self.twohundreds, self.fivehundreds]

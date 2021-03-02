@@ -1,7 +1,6 @@
 import asyncio
 import json
 from collections import deque
-import logging
 
 
 class Client:
@@ -29,6 +28,7 @@ class Client:
 
     async def send_msg(self, msg, msg_type):
         """Public method to send generic message (msg) of type msg_type"""
+        
         await self._send_msg({
             'type': msg_type,
             'payload': msg
@@ -36,10 +36,12 @@ class Client:
 
     async def _send_msg(self, msg):
         """Accepts a dictionary and sends a JSON string"""
+        
         await self._websocket.send(json.dumps(msg))
 
     def get_msg(self):
         """Checks message queue and returns the oldest message in its entirety, else returns False."""
+        
         try:
             msg = self.msg_queue.popleft()
             return msg
@@ -49,6 +51,7 @@ class Client:
     def get_msg_by_type(self, msg_type):
         """Checks message queue and discards messages until finding one matching the msg_type, then returns.
         If no message is found returns False"""
+        
         try:
             msg = None
             while not msg:
@@ -61,6 +64,7 @@ class Client:
 
     async def wait_for_msg(self, msg_type):
         """Listens to queue until a message of type msg_type arrives, then returns payload"""
+        
         while True:
             msg = self.get_msg_by_type(msg_type)
             if msg:

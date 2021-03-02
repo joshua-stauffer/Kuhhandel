@@ -5,7 +5,6 @@ Payment = payment.Payment
 
 class TestPayment(unittest.TestCase):
 
-
     def test_defaults(self):
         test_payment = payment.Payment()
         self.assertEqual(test_payment.count, 0)

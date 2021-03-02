@@ -152,6 +152,5 @@ class TestGame(unittest.TestCase):
         self.assertFalse(dog_challenge)
         self.assertFalse(another_animal_challenge)
 
-
 if __name__ == '__main__':
     unittest.main()

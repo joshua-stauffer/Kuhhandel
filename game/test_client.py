@@ -2,7 +2,6 @@ import asyncio
 import unittest
 import json
 from uuid import uuid4
-from collections import deque
 from string import ascii_lowercase
 from game.client import Client
 from game.player import Player

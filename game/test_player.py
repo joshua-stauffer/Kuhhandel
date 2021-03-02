@@ -57,7 +57,7 @@ class TestPlayer(unittest.TestCase):
         self.assertTrue(self.player.verify_bid(total))
         self.assertFalse(self.player.verify_bid(total + 20))
 
-    # test manipulators
+    # test mutators
 
     def test_accept_payment(self):
         payment = Payment(fifties=1)
