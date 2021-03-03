@@ -8,6 +8,28 @@ from game.player import Player
 
 current_games = []
 
+def main():
+    """Creates and destroys the event loop and server"""
+
+    start_server = websockets.serve(lobby, 'localhost', 9876)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(start_server)
+    print('started server at port 9876')
+    loop.create_task(cleanup_games())
+    try:
+        loop.run_forever()
+    except Exception as e:
+        print(f'shutting down server for exception {e}')
+    except KeyboardInterrupt:
+        print('shutting down server manually')
+    tasks = asyncio.all_tasks(loop=loop)
+    for t in tasks:
+        t.cancel()
+    group = asyncio.gather(*tasks, return_exceptions=True)
+    loop.run_until_complete(group)
+    loop.close()
+    print('Server stopped')
+
 def get_game():
     """Returns a game with open spots"""
 
@@ -47,10 +69,6 @@ async def cleanup_games():
                 current_games.remove(game)
         await asyncio.sleep(60)
 
-# create the loop and server
-start_server = websockets.serve(lobby, 'localhost', 9876)
-loop = asyncio.get_event_loop()
-loop.run_until_complete(start_server)
-print('started server at port 9876')
-loop.create_task(cleanup_games())
-loop.run_forever()
+
+if __name__ == '__main__':
+    main()
