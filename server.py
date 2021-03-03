@@ -18,7 +18,6 @@ def get_game():
         asyncio.create_task(game.run())
         return game
     else:
-        print('joining last game of list')
         return current_games[-1]
 
 async def lobby(websocket, path):
