@@ -18,6 +18,7 @@ def get_game():
         asyncio.create_task(game.run())
         return game
     else:
+        #TODO: autocancel a game if a client disconnects
         return current_games[-1]
 
 async def lobby(websocket, path):
@@ -51,4 +52,5 @@ start_server = websockets.serve(lobby, 'localhost', 9876)
 loop = asyncio.get_event_loop()
 loop.run_until_complete(start_server)
 print('started server at port 9876')
+loop.create_task(cleanup_games())
 loop.run_forever()
