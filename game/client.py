@@ -1,6 +1,7 @@
 import asyncio
 import json
 from collections import deque
+from websockets.exceptions import ConnectionClosedError
 
 
 class Client:
@@ -9,22 +10,17 @@ class Client:
     def __init__(self, websocket):
         self._websocket = websocket
         self.msg_queue = deque()
-        self.is_testing = False
 
     async def handle_msgs(self, is_complete):
         """Asynchronously receives incoming messages for the lifetime of a single client and forwards them to msg_queue.
         This method must be running for any other methods on this class to work.
         All messages placed in queue are dicts. Continues receiving messages until is_complete is True"""
-        
-        if self.is_testing:
-            # don't loop infinitely
+    
+        try:
             async for message in self._websocket:
                 self.msg_queue.append(json.loads(message))
-
-        else:
-            while not is_complete:
-                async for message in self._websocket:
-                    self.msg_queue.append(json.loads(message))
+        except ConnectionClosedError:
+            raise ClientDisconnectError
 
     async def send_msg(self, msg, msg_type):
         """Public method to send generic message (msg) of type msg_type"""
@@ -36,8 +32,10 @@ class Client:
 
     async def _send_msg(self, msg):
         """Accepts a dictionary and sends a JSON string"""
-        
-        await self._websocket.send(json.dumps(msg))
+        try:
+            await self._websocket.send(json.dumps(msg))
+        except ConnectionClosedError:
+            raise ClientDisconnectError
 
     def get_msg(self):
         """Checks message queue and returns the oldest message in its entirety, else returns False."""
@@ -71,3 +69,7 @@ class Client:
                 return msg['payload']
             else:
                 await asyncio.sleep(0.1)
+
+class ClientDisconnectError(Exception):
+    """Error class for client disconnecting early from websocket"""
+    pass

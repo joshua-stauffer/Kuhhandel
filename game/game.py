@@ -3,6 +3,7 @@ from collections import deque
 import datetime
 import random
 from .deck import make_deck
+from game.client import ClientDisconnectError
 
 
 class Game:
@@ -98,15 +99,26 @@ class Game:
     async def run(self):
         """Waits for enough players to join, then starts the game"""
         
-        while not self.is_ready:
-            await asyncio.sleep(1)
-        await self._play()
+        try:
+            while not self.is_ready:
+                await asyncio.sleep(1)
+            await self._play()
+        except ClientDisconnectError:
+            for p in self.players:
+                
+                try:
+                    await p.client.send_msg(
+                        'Sorry, the game has been ended because a player disconnected',
+                        'error'
+                    )
+                    
+                except ClientDisconnectError:
+                    continue
+            self.is_complete = True
 
     async def _play(self):
         """function implementing main gameplay"""
         
-        print('Started game')
-
         while len(self.deck) or self.players_can_trade():
 
             # synchronize game state
@@ -160,7 +172,6 @@ class Game:
         
         # allow client socket to close
         self.is_complete = True
-        print('Finished game')
 
     async def auction(self):
         """runs an auction between players[1:], defaulting to players[0] at cost of 0. Auction is open for param timeout seconds after the last successful bid, after which it returns the bidwinner and winning bid amount"""
@@ -297,3 +308,6 @@ class Game:
         if player_hand.count(card_name) == 2 and target_player_hand.count(card_name) == 2:
             return 2
         return 1
+
+class GameEndedError(Exception):
+    """Error for game ending before completion"""

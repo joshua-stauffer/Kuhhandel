@@ -14,7 +14,6 @@ class TestClient(unittest.TestCase):
         self.sock = MockSocket(time_delay=0.1)
         self.player = Player(self.sock, uuid4())
         self.client = self.player.client
-        self.client.is_testing = True
 
     def test_client_exists(self):
         self.assertIsNotNone(self.client)
